@@ -1,7 +1,7 @@
-var recs = require('./')()
+var recs = require('../')()
 
 function GravityWell () {
-  this.power = 10
+  this.power = 1000
 }
 
 function Body () {
@@ -11,52 +11,43 @@ function Body () {
   this.yv = 0
 }
 
-function Health () {
-  this.amount = 100
-}
-
 var Blackhole = [Body, GravityWell]
+var Ship = [Body]
 
-var Physics = recs.system([Body], function (d) {
+recs.system(Ship, function (d) {
   d.body.x += d.body.xv
   d.body.y += d.body.yv
+
   console.log('Physics', d.body.x, d.body.y)
 })
 
-var Suction = recs.system(Blackhole, [Body], function (g, d) {
-  console.log('Suction')
-
+recs.system(Blackhole, Ship, function (g, d) {
   var dx = g.body.x - d.body.x
   var dy = g.body.y - d.body.y
   var len = Math.sqrt(dx*dx + dy*dy) + 0.0001
   var force = g.gravityWell.power / (len * len)
-  dx /= len
-  dy /= len
-  d.body.xv += dx
-  d.body.yv += dy
+  d.body.xv += force * dx / len
+  d.body.yv += force * dy / len
 
-  if (len <= 5) {
-    d.emit('sucked-in')
-  }
-})
-
-recs.on([Health], 'sucked-in', function (e) {
-  console.log('sucked in')
-  e.amount -= 5
+  console.log('Suction')
 })
 
 recs.entity(Blackhole, function (e) {
+  e.body.x = 30
+  e.body.y = 0
+
   console.log('blackhole init')
-  e.body.x = 300
-  e.body.y = 300
 })
 
-recs.entity([Body, Health], function (e) {
-  console.log('ship init')
+recs.entity(Ship, function (e) {
   e.body.x = 0
-  e.body.y = 300
+  e.body.y = 0
   e.body.xv = 0
   e.body.yv = 0
+
+  console.log('ship init')
 })
 
-for (var i=0; i < 90; i++) recs.tick()
+recs.tick()
+recs.tick()
+recs.tick()
