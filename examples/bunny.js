@@ -15,10 +15,6 @@ function Sprite () {
   return sprite
 }
 
-function Health () {
-  this.amount = 100
-}
-
 function Body () {
   this.x = 0
   this.y = 0
@@ -34,11 +30,9 @@ recs.system([Body], function (d, delta) {
   d.body.x += d.body.xv * delta
   d.body.y += d.body.yv * delta
   d.body.rot += d.body.rotVel * delta
-  // console.log('Physics', d.body.x, d.body.y)
 })
 
 recs.system(Blackhole, [Body, Sprite], function (g, d, delta) {
-  // console.log('Suction')
   var dx = g.body.x - d.body.x
   var dy = g.body.y - d.body.y
   var len = Math.sqrt(dx*dx + dy*dy) + 0.0001
@@ -49,15 +43,6 @@ recs.system(Blackhole, [Body, Sprite], function (g, d, delta) {
   d.body.yv += force * dy * delta
 
   d.body.rotVel = force
-
-  if (len <= 5) {
-    d.emit('sucked-in')
-  }
-})
-
-recs.on([Health], 'sucked-in', function (e) {
-  console.log('sucked in')
-  e.amount -= 5
 })
 
 recs.entity(Blackhole, function (e) {
@@ -68,8 +53,7 @@ recs.entity(Blackhole, function (e) {
 })
 
 for (var i=0; i < 10; i++) {
-  recs.entity([Body, Health, Sprite], function (e) {
-    console.log('bunny init')
+  recs.entity([Body, Sprite], function (e) {
     e.body.x = 300
     e.body.y = 200 - i * 10
     e.body.xv = 3
