@@ -56,10 +56,12 @@ function Recs () {
   }
 
   this.tick = function () {
+    var args = Array.prototype.slice.call(arguments)
+
     singleSystems.forEach(function (system) {
       var entities = world.queryComponents(system.requirements)
       entities.forEach(function (e) {
-        system.func(e)
+        system.func.apply(null, [e].concat(args))
       })
     })
     comboSystems.forEach(function (system) {
@@ -69,7 +71,8 @@ function Recs () {
         var e1 = entities1[i]
         for (var j = 0; j < entities2.length; j++) {
           var e2 = entities2[j]
-          if (e1 !== e2) system.func(e1, e2)
+          if (e1 === e2) continue
+          system.func.apply(null, [e1, e2].concat(args))
         }
       }
     })

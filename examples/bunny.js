@@ -30,14 +30,14 @@ function Body () {
 
 var Blackhole = [Body, GravityWell, Sprite]
 
-recs.system([Body], function (d) {
-  d.body.x += d.body.xv
-  d.body.y += d.body.yv
-  d.body.rot += d.body.rotVel
+recs.system([Body], function (d, delta) {
+  d.body.x += d.body.xv * delta
+  d.body.y += d.body.yv * delta
+  d.body.rot += d.body.rotVel * delta
   // console.log('Physics', d.body.x, d.body.y)
 })
 
-recs.system(Blackhole, [Body, Sprite], function (g, d) {
+recs.system(Blackhole, [Body, Sprite], function (g, d, delta) {
   // console.log('Suction')
   var dx = g.body.x - d.body.x
   var dy = g.body.y - d.body.y
@@ -45,8 +45,8 @@ recs.system(Blackhole, [Body, Sprite], function (g, d) {
   var force = g.gravityWell.power / (len * len)
   dx /= len
   dy /= len
-  d.body.xv += force * dx
-  d.body.yv += force * dy
+  d.body.xv += force * dx * delta
+  d.body.yv += force * dy * delta
 
   d.body.rotVel = force
 
@@ -95,6 +95,5 @@ recs.system(Blackhole, function (e) {
 })
 
 app.ticker.add(function(delta) {
-  // TODO: accept delta
-  recs.tick()
+  recs.tick(delta)
 })
