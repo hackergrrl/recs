@@ -1,4 +1,4 @@
-var recs = require('./')()
+var recs = require('../')()
 var PIXI = require('pixi.js')
 
 var app = new PIXI.Application(640, 480, {backgroundColor : 0x1099bb})
