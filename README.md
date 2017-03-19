@@ -143,7 +143,7 @@ recs.on([Human], 'damage', function (e) {
 })
 
 recs.system([Health, Human], function onFire (e) {
-  e.emit('damage, 25)
+  e.emit('damage', 25)
 })
 
 recs.system([Health, Cyborg], function onFire (e) {
