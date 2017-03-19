@@ -177,8 +177,7 @@ These systems are particularly useful when two types of entities need to
 interact regularly, like collision detection:
 
 ```js
-recs.system([Player, BoundingBox], [Projectile, BoundingBox], function (plr,
-proj) {
+recs.system([Player, BoundingBox], [Projectile, BoundingBox], function (plr, proj) {
   if (collides(plr.boundingBox, proj.boundingBox)) {
     plr.emit('collision', plr)
     plr.emit('collision', proj)
@@ -197,8 +196,6 @@ as subsequent arguments.
 recs.on([Balloon], 'burst', function (e, adverb) {
   console.log('the balloon bursts ' + adverb)
 })
-
-...
 
 recs.system([Balloon], function (e) {
   e.balloon.lifetime--
