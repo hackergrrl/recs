@@ -11,8 +11,6 @@ powers recs.
 
 ## Usage
 
-A graphical demo of bunnies orbiting a gravity well:
-
 ```js
 var recs = require('recs')()
 
