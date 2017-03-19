@@ -147,7 +147,7 @@ recs.system([Health, Human], function onFire (e) {
 })
 
 recs.system([Health, Cyborg], function onFire (e) {
-  e.emit('damage, 1)
+  e.emit('damage', 1)
 })
 ```
 
