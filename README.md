@@ -160,12 +160,12 @@ var recs = RECS()
 var recs = require('recs')()
 ```
 
-### recs.system(components, func)
+### recs.system([name,] components, func)
 
 Defines a system that runs on all entities that have `components`. Runs the
 function `func` with an entity as its sole parameter.
 
-### recs.system(componentsA, componentsB, func)
+### recs.system([name,] componentsA, componentsB, func)
 
 Defines a system that runs on the cartesian product of all entities that have
 `componentsA` in one group, and all entities with `componentsB` in the other
@@ -204,7 +204,7 @@ recs.system([Balloon], function (e) {
 })
 ```
 
-### recs.entity(components, cb)
+### recs.entity([name,] components, cb)
 
 Creates a new entity with components `components`. `cb` is called with a
 reference to the brand new entity for any initialization you'd like to do.

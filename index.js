@@ -11,7 +11,12 @@ function Recs () {
   var comboSystems = []
   var eventHandlers = []
 
-  this.system = function (comps1, comps2, cb) {
+  this.system = function (name, comps1, comps2, cb) {
+    if (typeof name !== 'string') {
+      cb = comps2
+      comps2 = comps1
+      comps1 = name
+    }
     if (typeof comps2 === 'function' && !cb) {
       cb = comps2
       singleSystems.push({
@@ -27,8 +32,15 @@ function Recs () {
     }
   }
 
-  this.entity = function (comps, cb) {
+  this.entity = function (name, comps, cb) {
+    if (Array.isArray(name)) {
+      cb = comps
+      comps = name
+      name = ''
+    }
+
     var e = world.createEntity()
+    e._name = name
     comps.forEach(function (c) {
       e.addComponent(c)
     })
