@@ -205,7 +205,7 @@ recs.system([Balloon], function (e) {
 })
 ```
 
-### recs.entity([name,] components, cb)
+### recs.entity([name,] components[, cb])
 
 Creates a new entity with components `components`. `cb` is called with a
 reference to the brand new entity for any initialization you'd like to do.

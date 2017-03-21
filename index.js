@@ -47,7 +47,9 @@ function Recs () {
 
     e.emit = entityEmit
 
-    cb(e)
+    if (cb) cb(e)
+
+    return e
   }
 
   function entityEmit (msg) {
