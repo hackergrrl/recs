@@ -7,7 +7,8 @@ entities in a way that reduces shared state and promotes isolation.
 
 To read more about the ECS pattern, take a look at
 [nano-ecs](https://github.com/noffle/nano-ecs), the underlying module that
-powers recs.
+powers recs. It's a really useful pattern for writing the core logic in video
+games.
 
 ## Usage
 
