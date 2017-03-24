@@ -85,9 +85,10 @@ function Recs () {
       var entities2 = world.queryComponents(system.requirements2)
       for (var i = 0; i < entities1.length; i++) {
         var e1 = entities1[i]
-        for (var j = 0; j < entities2.length; j++) {
+        for (var j = 0; j < entities2.length && e1._manager; j++) {
           var e2 = entities2[j]
           if (e1 === e2) continue
+          if (!e2._manager) continue
           system.func.apply(null, [e1, e2].concat(args))
         }
       }
