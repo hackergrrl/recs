@@ -54,9 +54,11 @@ function Recs () {
 
   function entityEmit (msg) {
     var self = this
+    var args = Array.prototype.slice.call(arguments).slice(1)
+    args.unshift(self)
     eventHandlers.forEach(function (handler) {
-      if (self.hasAllComponents(handler.requirements)) {
-        handler.func(self)
+      if (handler.name === msg && self.hasAllComponents(handler.requirements)) {
+        handler.func.apply(self, args)
       }
     })
   }
