@@ -2,7 +2,7 @@
 
 > functional entity-component-system experiment
 
-recs allows for the definitions of components, systems, and event handlers on
+recs allows for the definitions of components, systems, and message handlers on
 entities in a way that reduces shared state and promotes isolation.
 
 To read more about the ECS pattern, take a look at
@@ -126,27 +126,27 @@ recs.system([Physics], function process (e) {
 })
 ```
 
-### Events
+### Messages
 
-Events can be published, [EventEmitter]()-style, on a specific entity. Event
-handlers specify what components they require to run: all applicable ones are
-fired.
+Messages can be published, in an [EventEmitter]()-style, on a specific entity.
+Message receivers specify what components they require in order to be received:
+all applicable receivers are fired.
 
 ```js
-recs.on([Health], 'damage', function (e, amount) {
+recs.recv([Health], 'damage', function (e, amount) {
   e.health.hp -= amount
 })
 
-recs.on([Human], 'damage', function (e) {
+recs.recv([Human], 'damage', function (e) {
   console.log('ouch!')
 })
 
 recs.system([Health, Human], function onFire (e) {
-  e.emit('damage', 25)
+  e.send('damage', 25)
 })
 
 recs.system([Health, Cyborg], function onFire (e) {
-  e.emit('damage', 1)
+  e.send('damage', 1)
 })
 ```
 
@@ -178,21 +178,21 @@ interact regularly, like collision detection:
 ```js
 recs.system([Player, BoundingBox], [Projectile, BoundingBox], function (plr, proj) {
   if (collides(plr.boundingBox, proj.boundingBox)) {
-    plr.emit('collision', plr)
-    plr.emit('collision', proj)
+    plr.send('collision', plr)
+    plr.send('collision', proj)
   }
 })
 ```
 
-### recs.on(components, event, cb)
+### recs.recv(components, msg, cb)
 
-Registers an event handler, which fires if an event is emitted on an entity that
-has the listed `components` and the event name `event`. `cb` is called with an
-entity as its first parameter; any other params passed on `emit` are included
-as subsequent arguments.
+Registers a message receiver, which fires if a message is sent to an entity that
+has the listed `components` and the message name `msg`. `cb` is called with an
+entity as its first parameter; any other params passed on `send` are included as
+subsequent arguments.
 
 ```js
-recs.on([Balloon], 'burst', function (e, adverb) {
+recs.recv([Balloon], 'burst', function (e, adverb) {
   console.log('the balloon bursts ' + adverb)
 })
 
@@ -200,7 +200,7 @@ recs.system([Balloon], function (e) {
   e.balloon.lifetime--
 
   if (e.balloon.lifetime === 0) {
-    e.emit('burst', 'loudly')
+    e.send('burst', 'loudly')
   }
 })
 ```

@@ -45,25 +45,24 @@ function Recs () {
       e.addComponent(c)
     })
 
-    e.emit = entityEmit
+    // TODO: put under prototype
+    e.send = function (msg) {
+      var self = this
+      var args = Array.prototype.slice.call(arguments).slice(1)
+      args.unshift(self)
+      eventHandlers.forEach(function (handler) {
+        if (handler.name === msg && self.hasAllComponents(handler.requirements)) {
+          handler.func.apply(self, args)
+        }
+      })
+    }
 
     if (cb) cb(e)
 
     return e
   }
 
-  function entityEmit (msg) {
-    var self = this
-    var args = Array.prototype.slice.call(arguments).slice(1)
-    args.unshift(self)
-    eventHandlers.forEach(function (handler) {
-      if (handler.name === msg && self.hasAllComponents(handler.requirements)) {
-        handler.func.apply(self, args)
-      }
-    })
-  }
-
-  this.on = function (comps, eventName, cb) {
+  this.recv = function (comps, eventName, cb) {
     eventHandlers.push({
       requirements: comps,
       name: eventName,
